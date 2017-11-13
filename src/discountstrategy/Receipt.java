@@ -6,6 +6,9 @@
 package discountstrategy;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,19 +16,20 @@ import java.text.DecimalFormat;
  */
 class Receipt {
     private Customer customer;
-    private LineItem[] lineItems;
+    //private LineItem[] lineItems;
+    private ArrayList<LineItem> lineItems;
     private ReceiptDataAccessStrategy custDatabase;
     private String storeInfo;
-    private String date;
+    private LocalDateTime date;
     private double subTotal;
     private double totalDiscount;
     
-    public Receipt(String storeInfo, String date, ReceiptDataAccessStrategy custDatabase, String customerId) {
+    public Receipt(String storeInfo, ReceiptDataAccessStrategy custDatabase, String customerId) {
         setStoreInfo(storeInfo);
-        setDate(date);
+        date = LocalDateTime.now();
         setReceiptDataAccessStrategy(custDatabase);
         lookUpCustomer(customerId);
-        lineItems = new LineItem[0];
+        lineItems = new ArrayList<LineItem>();
     }
 
     public String getStoreInfo() {
@@ -39,12 +43,12 @@ class Receipt {
         this.storeInfo = storeInfo;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
-        if(date == null || date.length() < 1) {
+    public void setDate(LocalDateTime date) {
+        if(date == null) {
             throw new IllegalArgumentException("A date Must be provided");
         }
         this.date = date;
@@ -66,20 +70,18 @@ class Receipt {
     }
     public final void generateLineItem(String productId, int qty) {
         // needs validation
-        LineItem[] tempItems = new LineItem[lineItems.length + 1];
-        System.arraycopy(lineItems, 0, tempItems, 0, lineItems.length);
-        tempItems[lineItems.length] = new LineItem(productId, qty, custDatabase);
-        lineItems = tempItems;
+        lineItems.add(new LineItem(productId, qty, custDatabase));
     }
     public final String returnReceiptHeader() {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         return "Store: " + storeInfo + '\n' + "Date: " + date + "\n Customer: " + customer.getName();
     }
     public final String returnLineItems() {
         String lineItemString = "";
         double subTotal = 0;
         double totalDiscount = 0;
-        for (int i = 0; i < lineItems.length; i++) {
-            LineItem current = lineItems[i];
+        for (int i = 0; i < lineItems.size(); i++) {
+            LineItem current = lineItems.get(i);
             lineItemString += current.toString();
             totalDiscount += current.getDiscountAmt();
             subTotal += current.getExtendedCost();

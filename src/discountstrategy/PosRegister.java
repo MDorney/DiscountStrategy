@@ -15,8 +15,8 @@ public class PosRegister {
         this.setReceiptType(receiptType);
     }
 
-    public final void startNewSale(String storeInfo, String date, String customerID) {
-        receiptGenerator = new ReceiptGeneratorService(storeInfo, date, receiptType, database, customerID);
+    public final void startNewSale(String storeInfo, String customerID) {
+        receiptGenerator = new ReceiptGeneratorService(storeInfo, receiptType, database, customerID);
     }
     
     public final void addItem(String productID, int qty) {

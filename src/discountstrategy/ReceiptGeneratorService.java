@@ -17,8 +17,8 @@ public class ReceiptGeneratorService {
     private ReceiptOutputStrategy receiptType;
     
     
-    public ReceiptGeneratorService(String storeInfo, String date, ReceiptOutputStrategy receiptType, ReceiptDataAccessStrategy database, String customerID){
-        this.receipt = new Receipt(storeInfo, date, database, customerID);
+    public ReceiptGeneratorService(String storeInfo, ReceiptOutputStrategy receiptType, ReceiptDataAccessStrategy database, String customerID){
+        this.receipt = new Receipt(storeInfo, database, customerID);
         this.setReceiptType(receiptType);
     }
 

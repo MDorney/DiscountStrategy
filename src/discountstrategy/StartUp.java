@@ -15,17 +15,16 @@ public class StartUp {
         ReceiptDataAccessStrategy prodDatabase = new InMemoryDataAccess();
         ReceiptOutputStrategy receiptType = new PrinterReceiptOutput();
         String storeInfo = "Kohl's Store #123";
-        String date = "10/16/2017";
         PosRegister pos = new PosRegister(prodDatabase, receiptType);
         
         // Customer sales
-        pos.startNewSale(storeInfo, date, "100");
+        pos.startNewSale(storeInfo, "100");
         pos.addItem("A101", 2);
         pos.endSale();
-        pos.startNewSale(storeInfo, date, "200");
+        pos.startNewSale(storeInfo, "200");
         pos.addItem("C222", 2);
         pos.endSale();
-        pos.startNewSale(storeInfo, date, "300");
+        pos.startNewSale(storeInfo, "300");
         pos.addItem("B205", 1);
         pos.endSale();
     }
